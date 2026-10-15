@@ -1,0 +1,37 @@
+{
+  "name": "cse-voice-hub-udp-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Standalone UDP Networking Server for CSE Voice Hub",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "nodemon --watch src --exec ts-node src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev:bridge": "ts-node src/bridge/local-bridge.ts",
+    "test:ping-pong": "ts-node src/testing/ping-pong-test.ts",
+    "test:audio": "ts-node src/testing/test-phase4-audio.ts",
+    "test:multiuser": "ts-node src/testing/test-phase5-multiuser.ts",
+    "test:phase3": "ts-node src/testing/test-phase3-udp.ts",
+    "test:metrics": "ts-node src/testing/test-phase7-network-metrics.ts",
+    "test:adaptive": "ts-node src/testing/test-phase8-adaptive-udp.ts",
+    "test:adaptive:e2e": "ts-node src/testing/test-phase8-multiuser-adaptive-e2e.ts",
+    "test:phase9": "ts-node src/testing/test-phase9-security-reliability.ts",
+    "test:phase10": "ts-node src/testing/test-phase10-performance.ts"
+  },
+  "dependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/ws": "^8.18.1",
+    "cse-voice-hub-monorepo": "file:..",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.3",
+    "ws": "^8.22.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "nodemon": "^3.1.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "cse-voice-hub-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CSE Voice Hub — Adaptive UDP-Based Multithreaded Real-Time Audio Conferencing System (Phase 0)",
+  "scripts": {
+    "install:all": "npm install && npm --prefix backend install && npm --prefix udp-server install && npm --prefix frontend install",
+    "dev": "npm run dev:backend",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:udp": "npm --prefix udp-server run dev",
+    "dev:bridge": "npm --prefix udp-server run dev:bridge",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "test:udp": "npm --prefix udp-server run test:ping-pong",
+    "test:audio": "npm --prefix udp-server run test:audio",
+    "test:multiuser": "npm --prefix udp-server run test:multiuser",
+    "test:phase6": "npm --prefix backend run test:state-sync",
+    "test:phase7": "npm --prefix udp-server run test:metrics",
+    "test:phase8": "npm --prefix udp-server run test:adaptive",
+    "test:phase8:e2e": "npm --prefix udp-server run test:adaptive:e2e",
+    "test:phase9": "npm --prefix udp-server run test:phase9",
+    "test:phase10": "npm --prefix udp-server run test:phase10",
+    "build:backend": "npm --prefix backend run build",
+    "build:udp": "npm --prefix udp-server run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm run build:backend && npm run build:udp && npm run build:frontend"
+  },
+  "keywords": [
+    "udp",
+    "audio-conferencing",
+    "express",
+    "mongodb",
+    "react",
+    "vite",
+    "typescript"
+  ],
+  "author": "Computer Engineering Department",
+  "license": "ISC"
+}

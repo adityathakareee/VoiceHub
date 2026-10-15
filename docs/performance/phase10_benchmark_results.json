@@ -1,0 +1,301 @@
+{
+  "timestamp": "2026-10-08T21:12:16.589Z",
+  "environment": {
+    "nodeVersion": "v22.19.0",
+    "platform": "win32",
+    "arch": "x64",
+    "udpPort": 5001,
+    "mtuLimitBytes": 1200
+  },
+  "experiments": {
+    "baseline": {
+      "packetsMeasured": 50,
+      "rttMs": {
+        "min": 0.6518999999998414,
+        "max": 66.22800000000007,
+        "avg": 3.933934000000063,
+        "median": 1.0429999999996653
+      },
+      "jitterMs": 1.2,
+      "packetLossPercent": 0,
+      "activeProfile": "ULTRA",
+      "fecActive": false,
+      "playoutDelayMs": 20
+    },
+    "packetLoss": [
+      {
+        "lossPercent": 0,
+        "profile": "HIGH",
+        "fecActive": false,
+        "targetPlayoutDelayMs": 25
+      },
+      {
+        "lossPercent": 1,
+        "profile": "HIGH",
+        "fecActive": false,
+        "targetPlayoutDelayMs": 25
+      },
+      {
+        "lossPercent": 3.5,
+        "profile": "CONSTRAINED",
+        "fecActive": true,
+        "targetPlayoutDelayMs": 25
+      },
+      {
+        "lossPercent": 8.5,
+        "profile": "CRITICAL",
+        "fecActive": true,
+        "targetPlayoutDelayMs": 25
+      }
+    ],
+    "latency": [
+      {
+        "rttMs": 1,
+        "playoutDelayMs": 20,
+        "profile": "HIGH"
+      },
+      {
+        "rttMs": 80,
+        "playoutDelayMs": 28,
+        "profile": "STANDARD"
+      },
+      {
+        "rttMs": 220,
+        "playoutDelayMs": 42,
+        "profile": "CONSTRAINED"
+      },
+      {
+        "rttMs": 350,
+        "playoutDelayMs": 55,
+        "profile": "CRITICAL"
+      }
+    ],
+    "jitter": [
+      {
+        "jitterMs": 2,
+        "playoutDelayMs": 22,
+        "profile": "HIGH"
+      },
+      {
+        "jitterMs": 25,
+        "playoutDelayMs": 80,
+        "profile": "CONSTRAINED"
+      },
+      {
+        "jitterMs": 55,
+        "playoutDelayMs": 155,
+        "profile": "CRITICAL"
+      },
+      {
+        "jitterMs": 80,
+        "playoutDelayMs": 200,
+        "profile": "CRITICAL"
+      }
+    ],
+    "combinedDegradation": {
+      "moderate": {
+        "telemetry": {
+          "rttMs": 160,
+          "jitterMs": 32,
+          "packetLossPercent": 4.2,
+          "bitrateUpKbps": 64,
+          "bitrateDownKbps": 64,
+          "packetsSent": 100,
+          "packetsReceived": 95,
+          "packetsLost": 5,
+          "bytesSent": 64000,
+          "bytesReceived": 60800,
+          "qualityRating": "FAIR",
+          "timestamp": 1791493937738
+        },
+        "state": {
+          "mode": "AUTO",
+          "profile": "CONSTRAINED",
+          "targetBitrateKbps": 32,
+          "frameIntervalMs": 25,
+          "fecActive": true,
+          "fecRecoveredCount": 0,
+          "targetPlayoutDelayMs": 111,
+          "reason": "Congestion Throttling: Network degraded (Loss: 4.2%, RTT: 160ms)",
+          "lastAdjustedTimestamp": 1791493937738
+        }
+      },
+      "severe": {
+        "telemetry": {
+          "rttMs": 340,
+          "jitterMs": 65,
+          "packetLossPercent": 9.5,
+          "bitrateUpKbps": 32,
+          "bitrateDownKbps": 32,
+          "packetsSent": 100,
+          "packetsReceived": 90,
+          "packetsLost": 10,
+          "bytesSent": 32000,
+          "bytesReceived": 28800,
+          "qualityRating": "POOR",
+          "timestamp": 1791493937738
+        },
+        "state": {
+          "mode": "AUTO",
+          "profile": "CRITICAL",
+          "targetBitrateKbps": 16,
+          "frameIntervalMs": 40,
+          "fecActive": true,
+          "fecRecoveredCount": 0,
+          "targetPlayoutDelayMs": 200,
+          "reason": "Multiplicative Decrease: Severe loss (9.5%) or high RTT (340ms) detected",
+          "lastAdjustedTimestamp": 1791493937738
+        }
+      }
+    },
+    "recoveryDynamics": {
+      "step1": {
+        "mode": "AUTO",
+        "profile": "STANDARD",
+        "targetBitrateKbps": 64,
+        "frameIntervalMs": 20,
+        "fecActive": false,
+        "fecRecoveredCount": 0,
+        "targetPlayoutDelayMs": 20,
+        "reason": "Additive Increase: Connection recovered to nominal standard",
+        "lastAdjustedTimestamp": 1791493937739
+      },
+      "step2": {
+        "mode": "AUTO",
+        "profile": "HIGH",
+        "targetBitrateKbps": 80,
+        "frameIntervalMs": 20,
+        "fecActive": false,
+        "fecRecoveredCount": 0,
+        "targetPlayoutDelayMs": 20,
+        "reason": "Additive Increase: Excellent conditions, stepping up to High profile",
+        "lastAdjustedTimestamp": 1791493937739
+      },
+      "step3": {
+        "mode": "AUTO",
+        "profile": "ULTRA",
+        "targetBitrateKbps": 96,
+        "frameIntervalMs": 15,
+        "fecActive": false,
+        "fecRecoveredCount": 0,
+        "targetPlayoutDelayMs": 20,
+        "reason": "Additive Increase: Pristine connection sustained across 3+ intervals",
+        "lastAdjustedTimestamp": 1791493937739
+      }
+    },
+    "fecEvaluation": {
+      "frameSizesTested": [
+        {
+          "samplesPerFrame": 240,
+          "frameDurationMs": 15,
+          "primaryFormat": "pcm16",
+          "primaryWireLength": 640,
+          "redundantFactor": 4,
+          "redundantBase64Length": 80,
+          "totalPacketWireBytes": 986,
+          "mtuSafe": true
+        },
+        {
+          "samplesPerFrame": 320,
+          "frameDurationMs": 20,
+          "primaryFormat": "pcm8",
+          "primaryWireLength": 428,
+          "redundantFactor": 5,
+          "redundantBase64Length": 88,
+          "totalPacketWireBytes": 780,
+          "mtuSafe": true
+        },
+        {
+          "samplesPerFrame": 400,
+          "frameDurationMs": 25,
+          "primaryFormat": "pcm8",
+          "primaryWireLength": 536,
+          "redundantFactor": 5,
+          "redundantBase64Length": 108,
+          "totalPacketWireBytes": 908,
+          "mtuSafe": true
+        },
+        {
+          "samplesPerFrame": 640,
+          "frameDurationMs": 40,
+          "primaryFormat": "pcm8",
+          "primaryWireLength": 428,
+          "redundantFactor": 8,
+          "redundantBase64Length": 108,
+          "totalPacketWireBytes": 819,
+          "mtuSafe": true
+        }
+      ],
+      "simulatedLossRecoveryRatePercent": 100,
+      "recoveredBytes": 640
+    },
+    "adaptiveVsStatic": {
+      "testCondition": "Congested (Loss: 5.0%, RTT: 150ms, Jitter: 28ms)",
+      "staticMode": {
+        "profile": "STANDARD",
+        "fecActive": false,
+        "bitrateKbps": 64,
+        "lostFramesRecovered": 0,
+        "unmitigatedLossCount": 5
+      },
+      "adaptiveMode": {
+        "profile": "CONSTRAINED",
+        "fecActive": true,
+        "bitrateKbps": 32,
+        "lostFramesRecovered": 5,
+        "unmitigatedLossCount": 0
+      }
+    },
+    "multiUserLoad": [
+      {
+        "clientCount": 2,
+        "broadcastPacketsSent": 20,
+        "expectedTotalDeliveries": 20,
+        "actualDeliveries": 20,
+        "deliveryRatePercent": 100,
+        "elapsedMs": 372.5479999999998,
+        "heapUsedDeltaBytes": 174672,
+        "heapUsedMb": 108.9559555053711
+      },
+      {
+        "clientCount": 5,
+        "broadcastPacketsSent": 20,
+        "expectedTotalDeliveries": 80,
+        "actualDeliveries": 80,
+        "deliveryRatePercent": 100,
+        "elapsedMs": 349.34839999999986,
+        "heapUsedDeltaBytes": 462464,
+        "heapUsedMb": 109.42036437988281
+      },
+      {
+        "clientCount": 10,
+        "broadcastPacketsSent": 20,
+        "expectedTotalDeliveries": 180,
+        "actualDeliveries": 180,
+        "deliveryRatePercent": 100,
+        "elapsedMs": 258.8698999999997,
+        "heapUsedDeltaBytes": 797232,
+        "heapUsedMb": 110.2361831665039
+      }
+    ],
+    "sustainedStability": {
+      "iterations": 200,
+      "initialHeapMb": 110.24517059326172,
+      "finalHeapMb": 110.5001449584961,
+      "rssMb": 189.06640625,
+      "heapDeltaMb": 0.254974365234375
+    },
+    "antiOscillationHysteresis": {
+      "fecDeadbandCyclesTested": 10,
+      "fecFlapCount": 0,
+      "boundaryCyclesTested": 10,
+      "boundaryProfileShiftCount": 0,
+      "hysteresisPreserved": true
+    }
+  },
+  "summary": {
+    "totalExperiments": 43,
+    "passedExperiments": 43,
+    "failedExperiments": 0
+  }
+}
