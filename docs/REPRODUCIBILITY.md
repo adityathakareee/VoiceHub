@@ -46,7 +46,7 @@ To run the complete interactive platform, start four terminal processes:
 | **Backend API** | `npm run dev:backend` | `http://localhost:5000` | Express REST API & WebSocket Presence |
 | **UDP Media Server** | `npm run dev:udp` | `127.0.0.1:5001` | Connectionless UDP Media Router & Policy Engine |
 | **Companion Bridge** | `npm run dev:bridge` | `ws://127.0.0.1:5002` | Local WebSocket-to-UDP Audio Relayer & Codec |
-| **Frontend Web App** | `npm run dev:frontend`| `http://localhost:5173` | React 18 / Vite Single Page Application |
+| **Frontend Web App** | `npm run dev:frontend`| `http://localhost:5174` | React 18 / Vite Single Page Application |
 
 ---
 

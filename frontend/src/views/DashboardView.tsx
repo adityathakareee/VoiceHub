@@ -129,7 +129,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   return (
     <div className="dashboard-view-container">
       {/* 1. Academic Project Header Banner */}
-      <div className="card mb-6" style={{ background: '#FFFFFF', borderLeft: '4px solid var(--brand-primary)' }}>
+      <div className="card card--banner mb-6" style={{ background: '#FFFFFF', borderLeft: '4px solid var(--brand-primary)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '11px', fontWeight: 600, color: 'var(--brand-primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
@@ -188,7 +188,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* 2. System Status Strip (Real State) */}
       <div className="status-strip">
-        <div className="status-strip-item">
+        <div className={`status-strip-item ${healthData ? 'status-strip-item--online' : 'status-strip-item--pending'}`}>
           <span className="status-strip-name">Backend API (:5000)</span>
           <span className={`status-strip-badge ${healthData ? 'text-success' : 'text-muted'}`}>
             <span className={`pulse-dot ${healthData ? '' : 'pulse-warning'}`} />
@@ -196,14 +196,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </span>
         </div>
 
-        <div className="status-strip-item">
+        <div className="status-strip-item status-strip-item--configured">
           <span className="status-strip-name">UDP Server (:5001)</span>
           <span className="status-strip-badge text-muted">
             <span className="pulse-dot pulse-warning" /> Configured — Port 5001
           </span>
         </div>
 
-        <div className="status-strip-item">
+        <div className={`status-strip-item ${bridgeConnected ? 'status-strip-item--online' : 'status-strip-item--ready'}`}>
           <span className="status-strip-name">Audio Bridge (:5002)</span>
           <span className={`status-strip-badge ${bridgeConnected ? 'text-success' : 'text-primary'}`}>
             <span className={`pulse-dot ${bridgeConnected ? '' : 'pulse-dot'}`} style={!bridgeConnected ? { background: '#2563EB' } : {}} />
@@ -211,7 +211,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </span>
         </div>
 
-        <div className="status-strip-item">
+        <div className={`status-strip-item ${healthData?.database?.status === 'connected' ? 'status-strip-item--connected' : 'status-strip-item--pending'}`}>
           <span className="status-strip-name">MongoDB Database</span>
           <span className={`status-strip-badge ${healthData?.database?.status === 'connected' ? 'text-success' : 'text-muted'}`}>
             <span className={`pulse-dot ${healthData?.database?.status === 'connected' ? '' : 'pulse-warning'}`} />
@@ -219,7 +219,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </span>
         </div>
 
-        <div className="status-strip-item">
+        <div className={`status-strip-item ${healthData ? 'status-strip-item--ready' : 'status-strip-item--pending'}`}>
           <span className="status-strip-name">WebSocket Control</span>
           <span className={`status-strip-badge ${healthData ? 'text-success' : 'text-muted'}`}>
             <span className={`pulse-dot ${healthData ? '' : 'pulse-warning'}`} />
@@ -231,18 +231,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* 3. Real Key Network Performance & Adaptive Transport Overview */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
         {/* Network Performance Block */}
-        <div className="card">
+        <div className="card card--telemetry">
           <div className="card-header">
             <div>
-              <h2 className="card-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Icons.Network size={16} /> Key Network Performance
+              <h2 className="card-title" style={{ display: 'flex', alignItems: 'center' }}>
+                <span className="card-title-icon-badge badge-telemetry">
+                  <Icons.Network size={16} />
+                </span>
+                <span>Key Network Performance</span>
               </h2>
               <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>RFC 3550 Real-Time Telemetry</span>
             </div>
             {onNavigateToNetworkMonitor && (
               <button
                 type="button"
-                className="btn btn-outline btn-sm"
+                className="btn btn-outline btn-sm btn-telemetry-action"
                 onClick={onNavigateToNetworkMonitor}
               >
                 Inspect Monitor →
@@ -251,7 +254,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
-            <div className="metric-card">
+            <div className="metric-card metric-card--rtt">
               <div className="metric-card-label">Round-Trip Time</div>
               <div className="metric-card-value" style={{ color: 'var(--brand-primary)' }}>
                 {metrics ? `${metrics.rttMs} ms` : 'N/A'}
@@ -259,7 +262,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <div className="metric-card-sub">{metrics ? 'Smoothed SRTT' : 'Awaiting audio probe'}</div>
             </div>
 
-            <div className="metric-card">
+            <div className="metric-card metric-card--jitter">
               <div className="metric-card-label">RFC 3550 Jitter</div>
               <div className="metric-card-value" style={{ color: 'var(--accent-cyan)' }}>
                 {metrics ? `${metrics.jitterMs} ms` : 'N/A'}
@@ -267,7 +270,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <div className="metric-card-sub">{metrics ? 'Inter-arrival variance' : 'Awaiting stream'}</div>
             </div>
 
-            <div className="metric-card">
+            <div className="metric-card metric-card--loss">
               <div className="metric-card-label">Packet Loss</div>
               <div className="metric-card-value" style={{ color: metrics ? ((metrics.packetLossPercent > 2) ? 'var(--color-danger)' : 'var(--color-success)') : 'var(--text-muted)' }}>
                 {metrics ? `${metrics.packetLossPercent}%` : 'N/A'}
@@ -275,7 +278,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <div className="metric-card-sub">{metrics ? 'Sequence gap tracking' : 'No stream active'}</div>
             </div>
 
-            <div className="metric-card">
+            <div className="metric-card metric-card--quality">
               <div className="metric-card-label">Channel Quality</div>
               <div className="metric-card-value" style={{ fontSize: '1.15rem', color: metrics ? 'var(--color-success)' : 'var(--text-muted)' }}>
                 {metrics?.qualityRating || 'Waiting for stream'}
@@ -286,18 +289,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Adaptive Transport Block */}
-        <div className="card">
+        <div className="card card--adaptive">
           <div className="card-header">
             <div>
-              <h2 className="card-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Icons.Adaptive size={16} /> Adaptive UDP Rate Control
+              <h2 className="card-title" style={{ display: 'flex', alignItems: 'center' }}>
+                <span className="card-title-icon-badge badge-adaptive">
+                  <Icons.Adaptive size={16} />
+                </span>
+                <span>Adaptive UDP Rate Control</span>
               </h2>
               <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>AIMD Elastic Packetization Subsystem</span>
             </div>
             {onNavigateToAdaptiveTransport && (
               <button
                 type="button"
-                className="btn btn-outline btn-sm"
+                className="btn btn-outline btn-sm btn-adaptive-action"
                 onClick={onNavigateToAdaptiveTransport}
               >
                 View Engine →
@@ -306,15 +312,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
-            <div className="metric-card">
+            <div className="metric-card metric-card--profile">
               <div className="metric-card-label">Active Profile</div>
-              <div className="metric-card-value" style={{ color: 'var(--brand-primary)', fontSize: '1.35rem' }}>
+              <div className="metric-card-value" style={{ color: '#6D28D9', fontSize: '1.35rem' }}>
                 {adaptiveState?.profile || 'Idle / Standby'}
               </div>
               <div className="metric-card-sub">{adaptiveState ? `${adaptiveState.targetBitrateKbps} kbps Target` : 'Idle / Standby'}</div>
             </div>
 
-            <div className="metric-card">
+            <div className="metric-card metric-card--frame">
               <div className="metric-card-label">Frame Duration</div>
               <div className="metric-card-value" style={{ color: 'var(--text-primary)' }}>
                 {adaptiveState ? `${adaptiveState.frameIntervalMs} ms` : 'Idle'}
@@ -322,7 +328,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <div className="metric-card-sub">Dynamic slice size</div>
             </div>
 
-            <div className="metric-card">
+            <div className="metric-card metric-card--redundancy">
               <div className="metric-card-label">Redundancy / FEC Status</div>
               <div className="metric-card-value" style={{ fontSize: '1.1rem', color: adaptiveState?.fecActive ? 'var(--color-warning)' : 'var(--color-success)' }}>
                 {adaptiveState ? (adaptiveState.fecActive ? 'ACTIVE (Loss > 2%)' : 'INACTIVE (Loss < 2%)') : 'Standby'}
@@ -330,9 +336,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <div className="metric-card-sub">RFC 2198 Redundancy</div>
             </div>
 
-            <div className="metric-card">
+            <div className="metric-card metric-card--delay">
               <div className="metric-card-label">Playout Delay</div>
-              <div className="metric-card-value" style={{ color: 'var(--brand-secondary)' }}>
+              <div className="metric-card-value" style={{ color: '#4F46E5' }}>
                 {adaptiveState ? `${adaptiveState.targetPlayoutDelayMs} ms` : 'N/A'}
               </div>
               <div className="metric-card-sub">Jitter buffer clamp</div>
@@ -342,42 +348,60 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* 4. Adaptation Architecture Flow Strip */}
-      <div className="card mb-6" style={{ background: '#FFFFFF' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-          <h2 className="section-title" style={{ fontSize: '0.9rem', marginBottom: 0 }}>
-            <Icons.Architecture size={15} /> Closed-Loop Adaptive Control Pipeline
+      <div className="card card--pipeline mb-6">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+          <h2 className="section-title" style={{ fontSize: '0.9rem', marginBottom: 0, display: 'flex', alignItems: 'center' }}>
+            <span className="card-title-icon-badge badge-pipeline">
+              <Icons.Architecture size={15} />
+            </span>
+            <span>Closed-Loop Adaptive Control Pipeline</span>
           </h2>
-          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>MTU: $\le 1200$ Bytes Clamped</span>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 500 }}>MTU: ≤ 1200 Bytes Clamped</span>
         </div>
 
         <div className="pipeline-flow">
-          <div className="pipeline-step active">
-            1. Network Telemetry
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 400 }}>RTT • Jitter • Loss %</div>
+          <div className="pipeline-step pipeline-step--1 active">
+            <div className="pipeline-step-header">
+              <span className="pipeline-step-badge">1</span>
+              <span className="pipeline-step-title">Network Telemetry</span>
+            </div>
+            <div className="pipeline-step-desc">RTT • Jitter • Loss %</div>
           </div>
           <span className="pipeline-arrow">→</span>
 
-          <div className="pipeline-step">
-            2. AIMD Controller
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 400 }}>Hysteresis Deadband</div>
+          <div className="pipeline-step pipeline-step--2">
+            <div className="pipeline-step-header">
+              <span className="pipeline-step-badge">2</span>
+              <span className="pipeline-step-title">AIMD Controller</span>
+            </div>
+            <div className="pipeline-step-desc">Hysteresis Deadband</div>
           </div>
           <span className="pipeline-arrow">→</span>
 
-          <div className="pipeline-step active">
-            3. Profile Selection
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 400 }}>16k - 96k Bitrate Pacing</div>
+          <div className="pipeline-step pipeline-step--3 active">
+            <div className="pipeline-step-header">
+              <span className="pipeline-step-badge">3</span>
+              <span className="pipeline-step-title">Profile Selection</span>
+            </div>
+            <div className="pipeline-step-desc">16k - 96k Bitrate Pacing</div>
           </div>
           <span className="pipeline-arrow">→</span>
 
-          <div className="pipeline-step">
-            4. Dynamic Framing & RFC 2198 Redundancy
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 400 }}>15ms - 40ms + Redundancy</div>
+          <div className="pipeline-step pipeline-step--4">
+            <div className="pipeline-step-header">
+              <span className="pipeline-step-badge">4</span>
+              <span className="pipeline-step-title">Dynamic Framing</span>
+            </div>
+            <div className="pipeline-step-desc">15ms - 40ms + RFC 2198</div>
           </div>
           <span className="pipeline-arrow">→</span>
 
-          <div className="pipeline-step active">
-            5. Dynamic Playout Buffer
-            <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 400 }}>20ms - 200ms Jitter Clamp</div>
+          <div className="pipeline-step pipeline-step--5 active">
+            <div className="pipeline-step-header">
+              <span className="pipeline-step-badge">5</span>
+              <span className="pipeline-step-title">Playout Buffer</span>
+            </div>
+            <div className="pipeline-step-desc">20ms - 200ms Jitter Clamp</div>
           </div>
         </div>
       </div>
@@ -385,22 +409,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* 5. Conference Room Actions: Create & Quick Join */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
         {/* Host Room Box */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div className="card card--action-host" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <div style={{ width: 28, height: 28, borderRadius: 'var(--radius-sm)', background: 'var(--bg-accent)', color: 'var(--brand-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.65rem' }}>
+              <div className="action-icon-badge action-icon-badge--host">
                 <Icons.Plus size={16} />
               </div>
-              <h2 className="card-title">Host a Conference Room</h2>
+              <h2 className="card-title" style={{ fontSize: '1rem', fontWeight: 700 }}>Host a Conference Room</h2>
             </div>
-            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
               Create an isolated conference room, receive a unique formatted room code (e.g. CVH-7K4P2M), and invite departmental peers.
             </p>
           </div>
           <button
             id="dashboard-create-room-btn"
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary btn-block-action"
             onClick={user ? onNavigateToCreateRoom : (onNavigateToLogin || onNavigateToCreateRoom)}
           >
             {user ? '+ Create Conference Room' : 'Sign In to Host Room →'}
@@ -408,15 +432,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Enter Code Box */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div className="card card--action-join" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <div style={{ width: 28, height: 28, borderRadius: 'var(--radius-sm)', background: 'var(--bg-subtle)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.65rem' }}>
+              <div className="action-icon-badge action-icon-badge--join">
                 <Icons.Shield size={16} />
               </div>
-              <h2 className="card-title">Enter Room Code</h2>
+              <h2 className="card-title" style={{ fontSize: '1rem', fontWeight: 700 }}>Enter Room Code</h2>
             </div>
-            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.5 }}>
               Enter an existing 10-character conference room code to join an active session.
             </p>
           </div>
@@ -431,7 +455,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <input
                 id="join-code-input"
                 type="text"
-                className="form-control"
+                className="form-control join-input-field"
                 placeholder="e.g. CVH-7K4P2M"
                 style={{ fontFamily: 'var(--font-mono)', letterSpacing: '0.04em', textTransform: 'uppercase' }}
                 value={joinCodeInput}
@@ -442,7 +466,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <button
                 id="join-code-submit-btn"
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-primary btn-join-submit"
                 disabled={isJoining}
               >
                 {isJoining ? 'Joining...' : 'Join'}
@@ -453,7 +477,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* 6. Real Conference Rooms Table / Grid */}
-      <div className="card">
+      <div className="card card--rooms-table">
         <div className="card-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <h2 className="card-title">Conference Rooms</h2>

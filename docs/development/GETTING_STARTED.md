@@ -65,7 +65,7 @@ npm run test:udp
 ```bash
 npm run dev:frontend
 ```
-* Access UI at: `http://localhost:5173`
+* Access UI at: `http://localhost:5174`
 
 ---
 

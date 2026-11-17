@@ -101,7 +101,7 @@ export const RoomsView: React.FC<RoomsViewProps> = ({
       {/* Filter & Quick Join Bar */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
         {/* Search Filter */}
-        <div className="card" style={{ padding: '0.85rem 1rem' }}>
+        <div className="card card--subtle-frame" style={{ padding: '0.85rem 1rem' }}>
           <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
             Search Available Rooms
           </label>
@@ -115,7 +115,7 @@ export const RoomsView: React.FC<RoomsViewProps> = ({
         </div>
 
         {/* Direct Join with Code */}
-        <div className="card" style={{ padding: '0.85rem 1rem' }}>
+        <div className="card card--subtle-frame" style={{ padding: '0.85rem 1rem' }}>
           <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
             Direct Room Code Join
           </label>
@@ -157,12 +157,11 @@ export const RoomsView: React.FC<RoomsViewProps> = ({
           {filteredRooms.map((room) => (
             <div
               key={room.id}
-              className="card"
+              className="card card--room-item"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                transition: 'border-color 0.15s ease',
               }}
             >
               <div>

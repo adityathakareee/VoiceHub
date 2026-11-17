@@ -40,7 +40,7 @@ export const NetworkMonitorView: React.FC = () => {
       </div>
 
       {/* Connection & Session Banner */}
-      <div className="card mb-6" style={{ background: '#FFFFFF' }}>
+      <div className="card card--banner mb-6" style={{ background: '#FFFFFF' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -72,7 +72,7 @@ export const NetworkMonitorView: React.FC = () => {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
         {/* RTT */}
-        <div className="card">
+        <div className="card metric-card metric-card--rtt">
           <div className="metric-card-label">Round-Trip Latency (RTT)</div>
           <div className="metric-card-value" style={{ color: 'var(--brand-primary)' }}>
             {metrics ? `${metrics.rttMs} ms` : 'N/A'}
@@ -83,7 +83,7 @@ export const NetworkMonitorView: React.FC = () => {
         </div>
 
         {/* RFC 3550 Jitter */}
-        <div className="card">
+        <div className="card metric-card metric-card--jitter">
           <div className="metric-card-label">RFC 3550 Jitter</div>
           <div className="metric-card-value" style={{ color: 'var(--accent-cyan)' }}>
             {metrics ? `${metrics.jitterMs} ms` : 'N/A'}
@@ -94,7 +94,7 @@ export const NetworkMonitorView: React.FC = () => {
         </div>
 
         {/* Packet Loss */}
-        <div className="card">
+        <div className="card metric-card metric-card--loss">
           <div className="metric-card-label">Packet Loss Fraction</div>
           <div className="metric-card-value" style={{ color: metrics ? ((metrics.packetLossPercent > 2) ? 'var(--color-danger)' : 'var(--color-success)') : 'var(--text-muted)' }}>
             {metrics ? `${metrics.packetLossPercent}%` : 'N/A'}
@@ -105,7 +105,7 @@ export const NetworkMonitorView: React.FC = () => {
         </div>
 
         {/* Channel Quality */}
-        <div className="card">
+        <div className="card metric-card metric-card--quality">
           <div className="metric-card-label">Quality Classification</div>
           <div className="metric-card-value" style={{ color: metrics ? 'var(--color-success)' : 'var(--text-muted)', fontSize: '1.25rem' }}>
             {metrics?.qualityRating || 'Waiting for stream'}
@@ -119,7 +119,7 @@ export const NetworkMonitorView: React.FC = () => {
       {/* Packet Accounting & Throughput */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
         {/* Packet Accounting Table */}
-        <div className="card">
+        <div className="card card--telemetry">
           <h2 className="card-title mb-3" style={{ fontSize: '0.9rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
             Sequence & Packet Counters
           </h2>
@@ -154,13 +154,13 @@ export const NetworkMonitorView: React.FC = () => {
         </div>
 
         {/* Throughput Bitrate Card */}
-        <div className="card">
+        <div className="card card--telemetry">
           <h2 className="card-title mb-3" style={{ fontSize: '0.9rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
             Throughput Bitrates (1-Second Rolling Window)
           </h2>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
-            <div className="metric-card" style={{ background: 'var(--bg-subtle)' }}>
+            <div className="metric-card metric-card--rtt">
               <div className="metric-card-label">Uplink Bitrate ↑</div>
               <div className="metric-card-value" style={{ fontSize: '1.35rem', color: 'var(--brand-primary)' }}>
                 {metrics ? `${metrics.bitrateUpKbps}` : 'N/A'}
@@ -168,7 +168,7 @@ export const NetworkMonitorView: React.FC = () => {
               <div className="metric-card-sub">kbps (Kilobits/sec)</div>
             </div>
 
-            <div className="metric-card" style={{ background: 'var(--bg-subtle)' }}>
+            <div className="metric-card metric-card--jitter">
               <div className="metric-card-label">Downlink Bitrate ↓</div>
               <div className="metric-card-value" style={{ fontSize: '1.35rem', color: 'var(--accent-cyan)' }}>
                 {metrics ? `${metrics.bitrateDownKbps}` : 'N/A'}

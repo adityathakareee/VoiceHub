@@ -86,13 +86,26 @@ async function runMultiUserTelemetryE2E() {
       udpServer = null;
     }
 
-    try {
-      bridgeServer = new LocalAudioBridge();
-      await bridgeServer.start();
-      logger.info('[PHASE 7 E2E] Started test Local Audio Bridge on port 5002');
-    } catch (_e) {
-      logger.info('[PHASE 7 E2E] Using existing Local Audio Bridge on port 5002');
+    const bridgeActive = await new Promise<boolean>((res) => {
+      const probe = http.get('http://127.0.0.1:5002', () => {
+        probe.destroy();
+        res(true);
+      });
+      probe.on('error', () => res(false));
+    });
+
+    if (bridgeActive) {
+      logger.info('[PHASE 7 E2E] Local Audio Bridge already running on port 5002');
       bridgeServer = null;
+    } else {
+      try {
+        bridgeServer = new LocalAudioBridge();
+        await bridgeServer.start();
+        logger.info('[PHASE 7 E2E] Started test Local Audio Bridge on port 5002');
+      } catch (_e) {
+        logger.info('[PHASE 7 E2E] Using existing Local Audio Bridge on port 5002');
+        bridgeServer = null;
+      }
     }
 
     const timestamp = Date.now();

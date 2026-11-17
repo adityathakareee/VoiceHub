@@ -114,20 +114,19 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           title="Click to view Multi-Process Infrastructure Status"
         >
           <span
-            className={`status-dot ${
-              isHealthy === true
+            className={`status-dot ${isHealthy === true
                 ? 'status-dot-online'
                 : isHealthy === false
-                ? 'status-dot-error'
-                : 'status-dot-pending'
-            }`}
+                  ? 'status-dot-error'
+                  : 'status-dot-pending'
+              }`}
           />
           <span className="health-label">
             {isHealthy === true
               ? 'Platform Ready'
               : isHealthy === false
-              ? 'Backend Degraded'
-              : 'Verifying Services...'}
+                ? 'Backend Degraded'
+                : 'Verifying Services...'}
           </span>
         </div>
 
@@ -145,13 +144,18 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
               <span className="user-name-header">
                 {user.firstName} {user.lastName}
               </span>
+              <span className="user-role-badge-header">
+                {user.role}
+              </span>
             </div>
             <button
               type="button"
-              className="btn btn-outline btn-xs ml-2"
+              className="header-logout-btn"
               onClick={handleLogout}
+              title="Sign Out"
             >
-              Sign Out
+              <Icons.LogOut size={13} />
+              <span>Sign Out</span>
             </button>
           </div>
         ) : (

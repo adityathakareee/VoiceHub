@@ -59,8 +59,8 @@ To perform manual hardware testing with two actual microphones and speakers:
    ```
 
 2. **Open Browser Instances**:
-   - Open Browser 1 (e.g. Chrome): Navigate to `http://localhost:5173`. Register/Login as Student 1. Create a room `CVH-XXXXXX`.
-   - Open Browser 2 (e.g. Chrome Incognito or Firefox): Navigate to `http://localhost:5173`. Register/Login as Student 2. Join room `CVH-XXXXXX`.
+   - Open Browser 1 (e.g. Chrome): Navigate to `http://localhost:5174`. Register/Login as Student 1. Create a room `CVH-XXXXXX`.
+   - Open Browser 2 (e.g. Chrome Incognito or Firefox): Navigate to `http://localhost:5174`. Register/Login as Student 2. Join room `CVH-XXXXXX`.
 
 3. **Establish Real-Time Audio**:
    - On Browser 1: Click **"🎙️ Connect Audio"**. Grant microphone permissions when prompted.

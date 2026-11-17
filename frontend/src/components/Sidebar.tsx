@@ -269,7 +269,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   className="user-avatar-sm"
                   onClick={() => handleNavClick('profile')}
                   title={`${user.firstName} ${user.lastName} (${user.role})`}
-                  style={{ cursor: 'pointer' }}
                 >
                   {user.firstName ? user.firstName[0].toUpperCase() : 'U'}
                 </div>
@@ -279,7 +278,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onClick={logout}
                   title="Sign Out"
                   aria-label="Sign Out"
-                  style={{ marginTop: '0.4rem' }}
                 >
                   <Icons.LogOut size={15} />
                 </button>

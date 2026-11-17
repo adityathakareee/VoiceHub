@@ -16,7 +16,7 @@ const envSchema = z.object({
       message: 'MONGODB_URI must be a valid MongoDB URI starting with mongodb:// or mongodb+srv://',
     })
     .default('mongodb://localhost:27017/cse_voice_hub'),
-  FRONTEND_URL: z.string().url('FRONTEND_URL must be a valid URL').default('http://localhost:5173'),
+  FRONTEND_URL: z.string().url('FRONTEND_URL must be a valid URL').default('http://localhost:5174'),
   JWT_SECRET: z.string().min(16, 'JWT_SECRET must be at least 16 characters long').default('cse_voice_hub_jwt_super_secret_key_2026'),
   JWT_EXPIRES_IN: z.string().default('15m'),
   COOKIE_NAME: z.string().default('cse_voice_hub_auth'),

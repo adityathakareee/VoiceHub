@@ -10,7 +10,7 @@ import { logger } from '../utils/logger';
 
 const BRIDGE_HOST = process.env.BRIDGE_HOST || '127.0.0.1';
 const BRIDGE_PORT = parseInt(process.env.BRIDGE_PORT || '5002', 10);
-const UDP_SERVER_HOST = process.env.UDP_HOST || '127.0.0.1';
+const UDP_SERVER_HOST = process.env.UDP_SERVER_HOST || process.env.UDP_HOST || '127.0.0.1';
 const UDP_SERVER_PORT = parseInt(process.env.UDP_PORT || '5001', 10);
 
 /**

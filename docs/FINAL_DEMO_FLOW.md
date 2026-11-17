@@ -13,7 +13,7 @@ This document outlines the step-by-step demonstration procedure for presentation
 ## 2. Live Demonstration Flow (Phase-by-Phase)
 
 ### Step 1: User Authentication & Role Enforcement (Phases 1 & 9)
-1. Open a browser window navigating to `http://localhost:5173`.
+1. Open a browser window navigating to `http://localhost:5174`.
 2. Register a new user:
    - Email: `alice@cse.edu`, Password: `Password@123`, Name: `Alice Walker`, Role: `STUDENT`.
 3. Inspect Browser DevTools $\to$ Application $\to$ Cookies:

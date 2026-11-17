@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { AudioSessionProvider, useAudioSession } from './context/AudioSessionContext';
 import { Sidebar, NavItem } from './components/Sidebar';
 import { TopHeader } from './components/TopHeader';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -17,6 +18,7 @@ import { RegisterView } from './views/RegisterView';
 
 const MainAppContent: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
+  const { isAudioConnected, activeRoomCode: audioRoomCode, stopAudio } = useAudioSession();
   const [activeNav, setActiveNav] = useState<NavItem>('overview');
   const [selectedRoomCode, setSelectedRoomCode] = useState<string>('');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
@@ -74,8 +76,14 @@ const MainAppContent: React.FC = () => {
       <Sidebar
         activeNav={activeNav}
         onNavigate={handleNavigate}
-        activeRoomCode={selectedRoomCode}
-        onOpenActiveRoom={() => setActiveNav('room-detail')}
+        activeRoomCode={selectedRoomCode || audioRoomCode || undefined}
+        isAudioConnected={isAudioConnected}
+        onOpenActiveRoom={() => {
+          if (audioRoomCode && !selectedRoomCode) {
+            setSelectedRoomCode(audioRoomCode);
+          }
+          setActiveNav('room-detail');
+        }}
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
         mobileOpen={mobileMenuOpen}
@@ -86,9 +94,12 @@ const MainAppContent: React.FC = () => {
       <div className="app-main-layout">
         <TopHeader
           activeNav={activeNav}
-          activeRoomCode={selectedRoomCode}
+          activeRoomCode={selectedRoomCode || audioRoomCode || undefined}
           onNavigate={handleNavigate}
-          onLogout={logout}
+          onLogout={async () => {
+            stopAudio();
+            await logout();
+          }}
           onToggleMobileMenu={() => setMobileMenuOpen((prev) => !prev)}
         />
 
@@ -156,7 +167,9 @@ const MainAppContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <AuthProvider>
-      <MainAppContent />
+      <AudioSessionProvider>
+        <MainAppContent />
+      </AudioSessionProvider>
     </AuthProvider>
   );
 };

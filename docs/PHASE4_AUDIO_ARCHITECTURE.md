@@ -61,7 +61,7 @@ Because standard web browsers cannot open arbitrary, raw UDP sockets via Node `d
 - **Token Acquisition**: Frontend calls `POST /api/rooms/:roomCode/udp-token` via authenticated Express REST API using HttpOnly cookie authentication.
 - **Token Passing**: Frontend passes short-lived UDP token to local companion over local WebSocket connection (`ws://127.0.0.1:5002`).
 - **Secret Isolation**: `UDP_SESSION_SECRET` is kept strictly on the backend and UDP server. Tokens expire in 5 minutes.
-- **Local Bridge Security**: WebSocket bridge binds strictly to `127.0.0.1`. Cross-origin verification restricts connections to allowed frontend origins (`http://localhost:5173`).
+- **Local Bridge Security**: WebSocket bridge binds strictly to `127.0.0.1`. Cross-origin verification restricts connections to allowed frontend origins (`http://localhost:5174`).
 
 ---
 

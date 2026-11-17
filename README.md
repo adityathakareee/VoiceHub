@@ -123,7 +123,7 @@ cp udp-server/.env.example udp-server/.env
 cp frontend/.env.example frontend/.env
 ```
 
-### 4. Running the Complete System
+### 4. Running the Complete System (Single-Laptop Local Demo)
 Open four separate terminal windows to launch the four concurrent processes:
 
 ```bash
@@ -136,11 +136,97 @@ npm run dev:udp
 # Terminal 3: Audio Companion Bridge (Port 5002)
 npm run dev:bridge
 
-# Terminal 4: Frontend Web App (Port 5173)
+# Terminal 4: Frontend Web App (Port 5174)
 npm run dev:frontend
 ```
 
-Visit **`http://localhost:5173`** in your browser.
+Visit **`http://localhost:5174`** in your browser.
+
+To demo multi-user audio on a single machine:
+1. Open Browser 1 (Chrome): Navigate to `http://localhost:5174`, log in as Student 1, create a room `CVH-XXXXXX`, and click **"Connect Audio"**.
+2. Open Browser 2 (Firefox or Chrome Incognito): Navigate to `http://localhost:5174`, log in as Student 2, join room `CVH-XXXXXX`, and click **"Connect Audio"**.
+3. Both browser sessions communicate with the single local bridge on `ws://127.0.0.1:5002`, which multiplexes separate client UDP sessions to `127.0.0.1:5001`.
+
+---
+
+### 5. Two-Physical-Laptop LAN Testing (Host Laptop A + Client Laptop B)
+
+The architecture supports multi-machine deployment across any standard local Wi-Fi or Ethernet LAN.
+
+```
++--------------------------------------------------------------------------------+
+|                             WI-FI / LOCAL AREA NETWORK                         |
++--------------------------------------------------------------------------------+
+             ^                                              ^
+             | (TCP 5000: REST & WS Presence)               |
+             | (UDP 5001: Audio & Telemetry Datagrams)      |
+             v                                              v
++------------------------------------------+   +------------------------------------------+
+|          LAPTOP A (Host Server)          |   |          LAPTOP B (Client Peer)          |
+|  LAN IP: e.g., 192.168.1.100             |   |  LAN IP: e.g., 192.168.1.105             |
+|                                          |   |                                          |
+|  - MongoDB (localhost:27017)             |   |  - Local Audio Bridge (127.0.0.1:5002)   |
+|  - Express Backend (:5000, binds 0.0.0.0)|   |  - Web Frontend (:5174, localhost)       |
+|  - UDP Server (:5001, binds 0.0.0.0)     |   |  - Chrome Mic / Speaker (Local Soundcard)|
+|  - Local Audio Bridge (127.0.0.1:5002)   |   |                                          |
+|  - Web Frontend (:5174, localhost)       |   |  Configuration (.env on Laptop B):       |
+|  - Chrome Mic / Speaker (Local Soundcard)|   |    VITE_API_BASE_URL=http://<LAPTOP_A>:5000|
+|                                          |   |    UDP_SERVER_HOST=<LAPTOP_A_IP>        |
++------------------------------------------+   +------------------------------------------+
+```
+
+#### Why the Audio Bridge Stays Local (Port 5002)
+The Companion Audio Bridge (`ws://127.0.0.1:5002`) binds strictly to loopback on **both** machines. It is the direct interface between the browser's Web Audio API and the machine's physical soundcard. It captures microphone PCM frames from that specific laptop and outputs received conference audio to that specific laptop's speakers. Only the central Express backend (port 5000) and UDP server (port 5001) are centralized on Laptop A.
+
+#### Step 1: Host Laptop A Setup (Server & User 1)
+1. Find Laptop A's LAN IP address:
+   ```powershell
+   ipconfig   # Look for IPv4 Address on Wi-Fi (e.g., 192.168.1.100)
+   ```
+2. Configure Windows Defender Firewall on Laptop A to allow inbound traffic:
+   - **TCP Port 5000** (Express REST API + WebSocket Control Layer)
+   - **UDP Port 5001** (UDP Audio Packet Router)
+   - Powershell command (Run as Administrator on Laptop A):
+     ```powershell
+     New-NetFirewallRule -DisplayName "CSE Voice Hub Backend" -Direction Inbound -LocalPort 5000 -Protocol TCP -Action Allow
+     New-NetFirewallRule -DisplayName "CSE Voice Hub UDP Server" -Direction Inbound -LocalPort 5001 -Protocol UDP -Action Allow
+     ```
+3. Start all services on Laptop A:
+   ```bash
+   npm run dev:backend    # Terminal 1
+   npm run dev:udp        # Terminal 2
+   npm run dev:bridge     # Terminal 3
+   npm run dev:frontend   # Terminal 4
+   ```
+4. On Laptop A, open browser to `http://localhost:5174`, log in as Student 1, and create a room `CVH-XXXXXX`.
+
+#### Step 2: Client Laptop B Setup (User 2)
+1. Clone the project repository onto Laptop B.
+2. Ensure Laptop B is connected to the same Wi-Fi network as Laptop A.
+3. Configure environment files on Laptop B:
+   - In `frontend/.env` (or create `frontend/.env.local`):
+     ```env
+     VITE_API_BASE_URL=http://<LAPTOP_A_IP>:5000
+     ```
+   - In `udp-server/.env` (or set environment variable):
+     ```env
+     UDP_SERVER_HOST=<LAPTOP_A_IP>
+     UDP_PORT=5001
+     ```
+4. Start only the client-side services on Laptop B:
+   ```bash
+   npm run dev:bridge     # Terminal 1: Laptop B's Companion Audio Bridge
+   npm run dev:frontend   # Terminal 2: Laptop B's Frontend Web App
+   ```
+5. On Laptop B, open browser to **`http://localhost:5174`**:
+   - **Microphone Permissions**: Accessing `http://localhost:5174` is recognized as a Secure Context by Chrome/Edge/Firefox, so microphone access is granted immediately without requiring custom browser security flags.
+   - Log in as Student 2, enter room code `CVH-XXXXXX`, and click **"Join Room"**.
+   - Click **"Connect Audio"** to start real-time two-way voice streaming over UDP.
+
+#### LAN Testing Precautions & Limitations
+- **Acoustic Feedback:** If both laptops are tested in the same room close to each other, wear headphones on both laptops to prevent physical microphone-to-speaker feedback squeal.
+- **Wi-Fi Router AP Isolation:** On campus or public Wi-Fi networks (e.g. eduroam, guest networks), client isolation / AP isolation may be enabled, blocking direct device-to-device communication. Use a mobile hotspot or private home Wi-Fi router for peer-to-peer testing.
+- **Windows Firewall:** If Laptop B cannot connect, ensure the inbound firewall rules on Laptop A are active, or temporarily permit Node.js network access in Windows Security prompts.
 
 ---
 
@@ -150,13 +236,13 @@ The complete codebase is verified through 12 deterministic test suites:
 
 ```bash
 # Phase 1: Authentication & User Security (28 Checks)
-npm --prefix backend run test:auth
+npm run test:auth
 
 # Phase 2: Conference Rooms & Membership (34 Checks)
-npm --prefix backend run test:rooms
+npm run test:rooms
 
 # Phase 3: UDP Networking Core (19 Checks)
-npm --prefix udp-server run test:phase3
+npm run test:phase3
 
 # Phase 4: Real-Time Audio Transport (18 Checks)
 npm run test:audio
@@ -168,16 +254,16 @@ npm run test:multiuser
 npm run test:phase6
 
 # Phase 7: Network Monitoring & Metrics (20 Checks)
-npm run test:phase7
+npm run test:metrics
 
 # Phase 7: Multi-User E2E Network Telemetry (7 Checks)
 npx ts-node udp-server/src/testing/test-phase7-multiuser-telemetry-e2e.ts
 
 # Phase 8: Adaptive UDP & Rate Control (30 Checks)
-npm run test:phase8
+npm run test:adaptive
 
 # Phase 8: Multi-User E2E Adaptive Control (8 Checks)
-npm run test:phase8:e2e
+npm run test:adaptive:e2e
 
 # Phase 9: Security Hardening & Reliability (31 Checks)
 npm run test:phase9

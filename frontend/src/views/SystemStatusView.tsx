@@ -78,7 +78,7 @@ export const SystemStatusView: React.FC = () => {
     {
       name: 'Vite Frontend Client',
       role: 'React 18 Single Page App',
-      port: ':5173',
+      port: window.location.port ? `:${window.location.port}` : ':5174',
       transport: 'HTTP / Web Audio API',
       status: 'Operational',
       statusType: 'success',
@@ -123,7 +123,16 @@ export const SystemStatusView: React.FC = () => {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))', gap: '1.25rem', marginBottom: '1.75rem' }}>
         {SERVICES.map((s) => (
-          <div key={s.name} className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div
+            key={s.name}
+            className={`card card--service-node ${s.statusType === 'success'
+                ? 'card--service-success'
+                : s.statusType === 'danger'
+                  ? 'card--service-danger'
+                  : 'card--service-neutral'
+              }`}
+            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+          >
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
                 <div>
@@ -131,13 +140,12 @@ export const SystemStatusView: React.FC = () => {
                   <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{s.role}</span>
                 </div>
                 <span
-                  className={`badge ${
-                    s.statusType === 'success'
+                  className={`badge ${s.statusType === 'success'
                       ? 'badge-success'
                       : s.statusType === 'warning'
-                      ? 'badge-warning'
-                      : 'badge-danger'
-                  }`}
+                        ? 'badge-warning'
+                        : 'badge-danger'
+                    }`}
                   style={{ fontSize: '10px' }}
                 >
                   ● {s.status}

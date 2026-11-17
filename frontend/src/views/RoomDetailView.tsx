@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { roomApi, RoomData } from '../services/room';
 import { useAuth } from '../context/AuthContext';
+import { useAudioSession } from '../context/AudioSessionContext';
 import { AudioConferencePanel } from '../components/AudioConferencePanel';
 import { roomPresenceClient, PresenceEventMessage } from '../services/roomPresenceClient';
 import { Icons } from '../components/Icons';
@@ -12,6 +13,7 @@ interface RoomDetailViewProps {
 
 export const RoomDetailView: React.FC<RoomDetailViewProps> = ({ roomCode, onNavigateBack }) => {
   const { user } = useAuth();
+  const { stopAudio, activeRoomCode } = useAudioSession();
   const [room, setRoom] = useState<RoomData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -187,11 +189,21 @@ export const RoomDetailView: React.FC<RoomDetailViewProps> = ({ roomCode, onNavi
     }
   };
 
+  // Cleanup audio if room becomes inactive
+  useEffect(() => {
+    if (room && room.status !== 'ACTIVE' && activeRoomCode === room.roomCode) {
+      stopAudio();
+    }
+  }, [room?.status, activeRoomCode, stopAudio]);
+
   const handleLeaveRoom = async () => {
     if (!room) return;
     if (!window.confirm('Are you sure you want to exit this conference room?')) return;
     try {
       setIsActionLoading(true);
+      if (activeRoomCode === room.roomCode) {
+        stopAudio();
+      }
       await roomApi.leaveRoom(room.roomCode);
       if (onNavigateBack) onNavigateBack();
     } catch (err) {
@@ -205,6 +217,9 @@ export const RoomDetailView: React.FC<RoomDetailViewProps> = ({ roomCode, onNavi
     if (!window.confirm('Warning: Closing this room will terminate all active audio sessions. Continue?')) return;
     try {
       setIsActionLoading(true);
+      if (activeRoomCode === room.roomCode) {
+        stopAudio();
+      }
       const res = await roomApi.closeRoom(room.roomCode);
       if (res.room) {
         setRoom(res.room);

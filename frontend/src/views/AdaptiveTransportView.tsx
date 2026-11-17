@@ -100,7 +100,7 @@ export const AdaptiveTransportView: React.FC = () => {
       </div>
 
       {/* Control Banner: Mode Switcher */}
-      <div className="card mb-6" style={{ background: '#FFFFFF' }}>
+      <div className="card card--banner mb-6" style={{ background: '#FFFFFF' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -203,27 +203,27 @@ export const AdaptiveTransportView: React.FC = () => {
       {/* Measured Conditions vs Adaptive Response Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
         {/* Measured Conditions */}
-        <div className="card">
+        <div className="card card--telemetry">
           <h2 className="card-title mb-3" style={{ fontSize: '0.9rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
             Observed Telemetry Inputs
           </h2>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', textAlign: 'center' }}>
-            <div className="metric-card" style={{ background: 'var(--bg-subtle)' }}>
+            <div className="metric-card metric-card--rtt">
               <div className="metric-card-label">RTT</div>
               <div className="metric-card-value" style={{ fontSize: '1.25rem', color: 'var(--brand-primary)' }}>
                 {metrics ? `${metrics.rttMs} ms` : 'N/A'}
               </div>
             </div>
 
-            <div className="metric-card" style={{ background: 'var(--bg-subtle)' }}>
+            <div className="metric-card metric-card--jitter">
               <div className="metric-card-label">Jitter</div>
               <div className="metric-card-value" style={{ fontSize: '1.25rem', color: 'var(--accent-cyan)' }}>
                 {metrics ? `${metrics.jitterMs} ms` : 'N/A'}
               </div>
             </div>
 
-            <div className="metric-card" style={{ background: 'var(--bg-subtle)' }}>
+            <div className="metric-card metric-card--loss">
               <div className="metric-card-label">Packet Loss</div>
               <div className="metric-card-value" style={{ fontSize: '1.25rem', color: metrics ? ((metrics.packetLossPercent > 2) ? 'var(--color-danger)' : 'var(--color-success)') : 'var(--text-muted)' }}>
                 {metrics ? `${metrics.packetLossPercent}%` : 'N/A'}
@@ -233,29 +233,29 @@ export const AdaptiveTransportView: React.FC = () => {
         </div>
 
         {/* Adaptive Response */}
-        <div className="card">
+        <div className="card card--adaptive">
           <h2 className="card-title mb-3" style={{ fontSize: '0.9rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
             Computed Adaptive Response
           </h2>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', textAlign: 'center' }}>
-            <div className="metric-card" style={{ background: 'var(--bg-subtle)' }}>
+            <div className="metric-card metric-card--frame">
               <div className="metric-card-label">Framing</div>
               <div className="metric-card-value" style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>
                 {adaptiveState ? `${adaptiveState.frameIntervalMs} ms` : 'Idle'}
               </div>
             </div>
 
-            <div className="metric-card" style={{ background: 'var(--bg-subtle)' }}>
+            <div className="metric-card metric-card--redundancy">
               <div className="metric-card-label">FEC Mode</div>
               <div className="metric-card-value" style={{ fontSize: '1.1rem', color: adaptiveState?.fecActive ? 'var(--color-warning)' : 'var(--color-success)' }}>
                 {adaptiveState ? (adaptiveState.fecActive ? 'ACTIVE' : 'STANDBY') : 'Standby'}
               </div>
             </div>
 
-            <div className="metric-card" style={{ background: 'var(--bg-subtle)' }}>
+            <div className="metric-card metric-card--delay">
               <div className="metric-card-label">Playout Delay</div>
-              <div className="metric-card-value" style={{ fontSize: '1.25rem', color: 'var(--brand-secondary)' }}>
+              <div className="metric-card-value" style={{ fontSize: '1.25rem', color: '#4F46E5' }}>
                 {adaptiveState ? `${adaptiveState.targetPlayoutDelayMs} ms` : 'N/A'}
               </div>
             </div>
